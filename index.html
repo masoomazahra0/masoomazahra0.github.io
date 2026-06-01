@@ -1,87 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Masooma Zahra | Dramatic Robot Stage</title>
-    <style>
-        body { margin: 0; background-color: #000; font-family: Arial, sans-serif; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        .theater-stage { position: relative; width: 900px; height: 480px; background: #000; border: 2px solid #333; overflow: hidden; }
-        
-        /* Pakistan Flag */
-        .stage-flag { position: absolute; top: 40px; right: 40px; width: 110px; height: 73px; display: flex; transition: opacity 0.5s; }
-        .flag-w { width: 25%; background: #fff; }
-        .flag-g { width: 75%; background: #004124; position: relative; }
-        .flag-svg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); width: 42px; height: 42px; }
+<style>
+    body { margin: 0; overflow: hidden; background: #f0f0f0; font-family: sans-serif; }
+    
+    /* Pakistan Flag */
+    #flag {
+        width: 150px; height: 100px; background: #006600;
+        position: absolute; top: 20px; right: 20px;
+        display: flex; align-items: center; justify-content: center;
+        border-left: 20px solid white;
+    }
+    #flag::before { content: "🌙 ★"; color: white; font-size: 30px; }
 
-        /* Robot */
-        .robot-actor { position: absolute; bottom: 30px; left: -100px; width: 70px; height: 110px; transition: all 1s linear; }
-        .metal-plate { fill: #000; stroke: #00ffff; stroke-width: 3; }
-        
-        /* Animation Classes */
-        .wave-arm { transform-origin: top center; animation: wave-out 0.8s infinite; }
-        @keyframes wave-out { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(90deg); } }
-        
-        #hello-text, #bye-text { position: absolute; font-size: 40px; opacity: 0; transition: opacity 0.5s; }
-        #plane { position: absolute; top: 50px; left: -150px; font-size: 50px; transition: left 2s linear; }
-        .hidden { opacity: 0 !important; }
-    </style>
+    /* Robot */
+    #robot {
+        width: 50px; height: 80px; background: #888;
+        position: absolute; bottom: 50px; left: -100px;
+        border-radius: 10px; animation: robotMove 10s linear forwards;
+    }
+
+    /* Text */
+    #msg { position: absolute; top: 40%; left: 40%; font-size: 40px; opacity: 0; }
+
+    /* Airplane */
+    #plane { position: absolute; top: 100px; left: -150px; font-size: 50px; }
+
+    /* Animations */
+    @keyframes robotMove {
+        0% { left: -100px; }
+        20% { left: 40%; transform: rotateY(0deg); }
+        30% { transform: rotateY(180deg); } /* Turn to screen */
+        40% { transform: rotateY(180deg) scale(1.2); } /* Come ahead */
+        50% { opacity: 1; } /* Hand wave logic would go here */
+        60% { content: "Hello World"; }
+        70% { opacity: 0; }
+        80% { top: 20px; left: 80%; } /* Grabs flag */
+        90% { top: 20px; left: 80%; background: red; } /* Drops it */
+        100% { left: 100%; } /* Runs away */
+    }
+</style>
 </head>
 <body>
 
-    <div class="theater-stage">
-        <div class="stage-flag" id="stageFlag">
-            <div class="flag-w"></div>
-            <div class="flag-g"><svg class="flag-svg" viewBox="0 0 100 100"><path d="M60,15 A35,35 0 1,0 95,50" fill="#fff"/></svg></div>
-        </div>
-        
-        <div id="hello-text" style="top: 100px; left: 350px;">Hello World!</div>
-        <div id="bye-text" style="top: 200px; left: 400px;">Ahhhhhhh! BYE!</div>
-        <div id="plane">✈️</div>
+    <div id="flag"></div>
+    <div id="robot">🤖</div>
+    <div id="msg">Hello World</div>
+    <div id="plane">✈️💨</div>
 
-        <div class="robot-actor" id="player">
-            <svg viewBox="0 0 70 120">
-                <rect class="metal-plate" x="17" y="12" width="36" height="24" rx="3" />
-                <rect class="metal-plate" x="12" y="41" width="46" height="40" rx="4" />
-                <g id="bot-arm" class="wave-arm"><rect class="metal-plate" x="3" y="45" width="8" height="30" /></g>
-            </svg>
-        </div>
-    </div>
-
-    <script>
-        const actor = document.getElementById("player");
-        const flag = document.getElementById("stageFlag");
-        const hello = document.getElementById("hello-text");
-        const bye = document.getElementById("bye-text");
-        const plane = document.getElementById("plane");
-
-        // 1. Move to center and wave
-        setTimeout(() => {
-            actor.style.left = "400px";
-        }, 500);
-
-        setTimeout(() => {
-            hello.style.opacity = "1";
-        }, 2000);
-
-        // 2. Plane passes, robot disappears
-        setTimeout(() => {
-            plane.style.left = "1000px";
-            actor.style.opacity = "0";
-            hello.style.opacity = "0";
-        }, 4000);
-
-        // 3. Come back, grab flag, run
-        setTimeout(() => {
-            actor.style.opacity = "1";
-            actor.style.left = "800px"; // Move to flag
-            actor.querySelector("#bot-arm").classList.remove("wave-arm"); // Stop waving
-        }, 6000);
-
-        setTimeout(() => {
-            flag.classList.add("hidden"); // Grab flag
-            bye.style.opacity = "1";
-            actor.style.left = "1000px"; // Run away
-        }, 7500);
-    </script>
 </body>
 </html>
