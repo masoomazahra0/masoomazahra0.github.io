@@ -2,181 +2,126 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Masooma Zahra | Dramatic Animation Stage</title>
+    <title>Masooma Zahra | Dramatic Robot Stage</title>
     <style>
         body { 
-            font-family: Arial, sans-serif; 
-            line-height: 1.6; 
-            padding: 40px; 
-            max-width: 800px; 
-            margin: auto; 
-            color: #333; 
-            background-color: #fafafa; 
+            margin: 0;
+            padding: 20px;
+            background-color: #000000;
+            font-family: Arial, sans-serif;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
         }
-        h1 { color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; margin-top: 40px; }
-        h2 { color: #16a085; margin-top: 30px; }
-        .highlight { font-weight: bold; color: #2c3e50; }
-        ul { padding-left: 20px; }
-        li { margin-bottom: 8px; }
 
-        /* --- THE DRAMATIC THEATER STAGE --- */
+        /* --- STAGE VIEWPORT --- */
         .theater-stage {
             position: relative;
             width: 100%;
-            height: 400px;
-            background: linear-gradient(135deg, #0b131a, #111e25);
-            border-radius: 12px;
+            max-width: 900px;
+            height: 480px;
+            background: #000000;
+            border: 2px solid #111;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-            margin-bottom: 35px;
-            perspective: 600px; /* Allows the robot to step "forward" in 3D space */
+            perspective: 800px;
         }
 
-        /* Elements that will completely vanish */
-        .disappearing-act {
-            transition: opacity 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045), transform 0.4s ease;
+        /* Elements that completely vanish */
+        .stage-props {
+            transition: opacity 0.25s ease, transform 0.25s ease;
         }
         .vanished {
             opacity: 0 !important;
-            transform: scale(0) translateY(-100px) !important;
+            transform: scale(0) !important;
             pointer-events: none;
         }
 
-        /* Headline Overlay */
+        /* Hello World Title */
         #stage-headline {
             position: absolute;
-            top: 40px;
+            top: 30px;
             width: 100%;
             text-align: center;
-            font-size: 40px;
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: 3px;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 10;
-        }
-
-        /* Flag Positioning */
-        .stage-flag {
-            position: absolute;
-            top: 110px;
-            left: 10%;
-            width: 80%;
-            height: 80px;
-            border-radius: 6px;
-            display: flex;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            font-size: 52px;
+            font-weight: bold;
+            color: #00ffcc;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px #00ffcc;
             opacity: 0;
             transform: translateY(-20px);
-            transition: all 0.6s ease;
+            transition: all 0.5s ease;
             z-index: 5;
         }
 
-        .flag-w { width: 25%; background: #fff; }
+        /* Fixed Pakistan Flag Position */
+        .stage-flag {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 110px;
+            height: 73px;
+            border: 1px solid rgba(255,255,255,0.3);
+            display: flex;
+            z-index: 5;
+        }
+        .flag-w { width: 25%; background: #ffffff; }
         .flag-g { width: 75%; background: #004124; position: relative; }
-        .flag-svg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); width: 45px; height: 45px; }
+        .flag-svg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); width: 42px; height: 42px; }
 
-        /* Cinematic Airplane */
-        .stage-jet {
+        /* --- MECHANICAL ROBOT ACTOR --- */
+        .robot-actor {
             position: absolute;
-            left: -100px;
-            top: 130px;
-            font-size: 40px;
-            z-index: 30;
-            display: none;
-            line-height: 1;
-        }
-        .jet-fly-animation {
-            display: block;
-            animation: flightPath 3.5s linear forwards;
-        }
-        @keyframes flightPath {
-            0% { left: -100px; top: 140px; transform: scale(0.7); }
-            50% { top: 110px; transform: scale(1.1); }
-            100% { left: 110%; top: 80px; transform: scale(1.4); }
-        }
-
-        /* Jet Particles */
-        .jet-exhaust {
-            position: absolute;
-            pointer-events: none;
-            border-radius: 50%;
-            z-index: 25;
-            animation: scatter 0.6s ease-out forwards;
-        }
-        @keyframes scatter {
-            0% { opacity: 0.9; transform: scale(1); }
-            100% { opacity: 0; transform: scale(3) translateY(-15px); }
-        }
-
-        /* --- THE ACTOR: ROBOT --- */
-        .actor-robot {
-            position: absolute;
-            bottom: 20px;
-            left: -150px;
-            width: 100px;
+            bottom: 30px;
+            left: -120px;
+            width: 70px;
+            height: 110px;
             z-index: 20;
-            transform-style: preserve-3d;
-            transition: left 3.5s linear, bottom 1.2s ease, transform 1.2s ease;
+            transition: left 3.2s linear, bottom 1s ease, transform 1s ease, color 0.2s;
+            color: #00ffff; /* Neon Cyan highlights */
         }
 
-        .r-head {
-            width: 60px;
-            height: 60px;
-            background: #7f8c8d;
-            border-radius: 12px;
-            margin: auto;
-            position: relative;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+        .robot-svg {
+            width: 100%;
+            height: 100%;
+            overflow: visible;
         }
 
-        .r-eye {
-            width: 8px;
-            height: 8px;
-            background: #00ffff;
-            border-radius: 50%;
-            position: absolute;
-            top: 18px;
-            box-shadow: 0 0 8px #00ffff;
-            transition: background 0.2s, box-shadow 0.2s;
-        }
-        .r-eye.left { left: 14px; }
-        .r-eye.right { right: 14px; }
-
-        .r-mouth {
-            width: 24px;
-            height: 4px;
-            background: #2c3e50;
-            position: absolute;
-            bottom: 12px;
-            left: 18px;
-            border-radius: 2px;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        /* Robot Metal Frame Shapes */
+        .metal-plate {
+            fill: #000000;
+            stroke: currentColor;
+            stroke-width: 3;
+            stroke-linejoin: miter;
         }
 
-        .r-body {
-            width: 80px;
-            height: 75px;
-            background: #95a5a6;
-            margin: auto;
-            border-radius: 10px;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        .glowing-eye {
+            fill: currentColor;
+            transition: all 0.2s ease;
         }
 
-        .r-arm {
-            width: 12px;
-            height: 50px;
-            background: #7f8c8d;
-            position: absolute;
-            top: 72px;
+        .robot-expression {
+            stroke: currentColor;
+            stroke-width: 3;
+            fill: none;
+            stroke-linecap: round;
+            transition: all 0.2s ease;
         }
-        .r-arm.left { left: -4px; transform-origin: top; }
-        .r-arm.right { right: -4px; transform-origin: top; }
 
-        /* Animation States */
-        .marching .r-arm.left { animation: swingL 0.4s infinite alternate linear; }
-        .marching .r-arm.right { animation: swingR 0.4s infinite alternate linear; }
-        @keyframes swingL { from { transform: rotate(-25deg); } to {
+        /* Joint Pivot Locations */
+        #bot-arm-l { transform-origin: 15px 45px; }
+        #bot-arm-r { transform-origin: 55px 45px; }
+        #bot-leg-l { transform-origin: 22px 80px; }
+        #bot-leg-r { transform-origin: 48px 80px; }
+
+        /* Marching Joint Motion */
+        .marching #bot-arm-l { animation: jointSwing 0.4s infinite alternate linear; }
+        .marching #bot-arm-r { animation: jointSwingInv 0.4s infinite alternate linear; }
+        .marching #bot-leg-l { animation: jointSwingInv 0.4s infinite alternate linear; }
+        .marching #bot-leg-r { animation: jointSwing 0.4s infinite alternate linear; }
+
+        @keyframes joint
