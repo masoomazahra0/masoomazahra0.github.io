@@ -2,25 +2,25 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>Animated Scene</title>
+<title>Animated Scene v2</title>
 
 <style>
 body {
   margin: 0;
   overflow: hidden;
-  background: black;
+  background: radial-gradient(circle, #000010, #000);
   font-family: Arial;
 }
 
-/* Glow Text */
+/* Glow text */
 #hello {
   position: absolute;
-  top: 40px;
+  top: 30px;
   width: 100%;
   text-align: center;
-  font-size: 60px;
-  color: #00ffcc;
-  text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc, 0 0 40px #00ffcc;
+  font-size: 55px;
+  color: #00ffd5;
+  text-shadow: 0 0 10px #00ffd5, 0 0 25px #00ffd5;
   animation: glow 2s infinite alternate;
 }
 
@@ -29,31 +29,20 @@ body {
   to { transform: scale(1.1); }
 }
 
-/* Pakistan Flag Popup */
+/* Flag */
 #flag {
   position: absolute;
   right: 20px;
   top: 100px;
-  width: 120px;
-  height: 80px;
+  width: 140px;
+  height: 90px;
   border: 2px solid white;
-  animation: pop 2s ease-in-out infinite alternate;
+  animation: pop 2s infinite alternate;
 }
 
 @keyframes pop {
-  from { transform: scale(0.8); }
-  to { transform: scale(1.1); }
-}
-
-/* Robot */
-#robot {
-  position: absolute;
-  bottom: 50px;
-  left: 0;
-  width: 60px;
-  height: 60px;
-  background: gray;
-  border-radius: 10px;
+  from { transform: scale(0.9); }
+  to { transform: scale(1.05); }
 }
 </style>
 </head>
@@ -62,14 +51,21 @@ body {
 
 <div id="hello">HELLO WORLD</div>
 
-<!-- Pakistan Flag -->
+<!-- 🇵🇰 Pakistan Flag (correct crescent + star) -->
 <svg id="flag" viewBox="0 0 60 40">
-  <rect width="60" height="40" fill="green"/>
-  <rect width="15" height="40" fill="white"/>
-  <circle cx="38" cy="20" r="10" fill="white"/>
-</svg>
+  <rect width="60" height="40" fill="#006600"/>
 
-<div id="robot"></div>
+  <!-- white stripe -->
+  <rect width="15" height="40" fill="white"/>
+
+  <!-- crescent -->
+  <circle cx="38" cy="20" r="10" fill="white"/>
+  <circle cx="41" cy="20" r="8" fill="#006600"/>
+
+  <!-- star -->
+  <polygon points="48,14 50,20 56,20 51,24 53,30 48,26 43,30 45,24 40,20 46,20"
+           fill="white"/>
+</svg>
 
 <canvas id="canvas"></canvas>
 
@@ -80,75 +76,120 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Airplane state
-let planeX = 0;
-let planeY = 150;
-let angle = 0;
+// Jet
+let jetX = 0;
+let jetY = 180;
 
-// Robot movement
+// particles (hearts)
+let hearts = [];
+
+// robot (human-like)
 let robotX = 0;
-let direction = 2;
+let dir = 2;
 
-// Smoke particles
-let particles = [];
+function drawJet(x, y) {
+  ctx.fillStyle = "#ffffff";
 
-function drawPlane(x, y, angle) {
-  ctx.save();
-  ctx.translate(x, y);
-  ctx.rotate(angle);
-
-  ctx.fillStyle = "white";
   ctx.beginPath();
-  ctx.moveTo(0, 0);
-  ctx.lineTo(30, 10);
-  ctx.lineTo(0, -10);
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + 40, y + 10);
+  ctx.lineTo(x, y - 10);
   ctx.closePath();
   ctx.fill();
 
-  ctx.restore();
+  // wings
+  ctx.beginPath();
+  ctx.moveTo(x + 15, y);
+  ctx.lineTo(x + 5, y + 20);
+  ctx.lineTo(x + 25, y + 10);
+  ctx.fill();
 }
 
-function createSmoke(x, y) {
-  particles.push({
-    x: x,
-    y: y,
+// ❤️ heart particle
+function createHeart(x, y) {
+  hearts.push({
+    x,
+    y,
+    size: Math.random() * 6 + 4,
     alpha: 1,
-    size: Math.random() * 5 + 2
+    vy: Math.random() * 1 + 0.5
   });
 }
 
-function drawParticles() {
-  for (let i = 0; i < particles.length; i++) {
-    let p = particles[i];
-    ctx.fillStyle = `rgba(200,200,200,${p.alpha})`;
+function drawHearts() {
+  for (let h of hearts) {
+    ctx.save();
+    ctx.globalAlpha = h.alpha;
+    ctx.fillStyle = "red";
+
     ctx.beginPath();
-    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.moveTo(h.x, h.y);
+    ctx.bezierCurveTo(h.x - h.size, h.y - h.size,
+                      h.x - h.size*1.5, h.y + h.size/2,
+                      h.x, h.y + h.size);
+    ctx.bezierCurveTo(h.x + h.size*1.5, h.y + h.size/2,
+                      h.x + h.size, h.y - h.size,
+                      h.x, h.y);
     ctx.fill();
 
-    p.y += 1;
-    p.alpha -= 0.02;
+    ctx.restore();
+
+    h.y += h.vy;
+    h.alpha -= 0.02;
   }
 
-  particles = particles.filter(p => p.alpha > 0);
+  hearts = hearts.filter(h => h.alpha > 0);
+}
+
+// 👤 simple human robot
+function drawRobot(x, y) {
+  ctx.strokeStyle = "#00ffcc";
+  ctx.lineWidth = 3;
+
+  // head
+  ctx.beginPath();
+  ctx.arc(x, y - 40, 10, 0, Math.PI * 2);
+  ctx.stroke();
+
+  // body
+  ctx.beginPath();
+  ctx.moveTo(x, y - 30);
+  ctx.lineTo(x, y);
+  ctx.stroke();
+
+  // arms
+  ctx.beginPath();
+  ctx.moveTo(x, y - 20);
+  ctx.lineTo(x - 15, y - 10);
+  ctx.moveTo(x, y - 20);
+  ctx.lineTo(x + 15, y - 10);
+  ctx.stroke();
+
+  // legs (walking motion)
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x - 10, y + 20);
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + 10, y + 20);
+  ctx.stroke();
 }
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Plane movement + rotation
-  planeX += 3;
-  angle += 0.05;
-  if (planeX > canvas.width) planeX = 0;
+  // jet movement
+  jetX += 4;
+  if (jetX > canvas.width) jetX = -50;
 
-  createSmoke(planeX, planeY);
-  drawPlane(planeX, planeY, angle);
-  drawParticles();
+  drawJet(jetX, jetY);
+  createHeart(jetX, jetY);
+  drawHearts();
 
-  // Robot movement
-  robotX += direction;
-  if (robotX > canvas.width - 60 || robotX < 0) direction *= -1;
+  // robot movement
+  robotX += dir;
+  if (robotX > canvas.width - 50 || robotX < 50) dir *= -1;
 
-  document.getElementById("robot").style.left = robotX + "px";
+  drawRobot(robotX, canvas.height - 80);
 
   requestAnimationFrame(animate);
 }
