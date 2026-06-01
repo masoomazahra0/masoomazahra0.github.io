@@ -4,313 +4,76 @@
     <meta charset="UTF-8" />
     <title>Masooma Zahra | Dramatic Robot Stage</title>
     <style>
-        body { 
-            margin: 0;
-            padding: 20px;
-            background-color: #000000;
-            font-family: Arial, sans-serif;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            box-sizing: border-box;
-        }
-
-        /* --- STAGE VIEWPORT --- */
-        .theater-stage {
-            position: relative;
-            width: 100%;
-            max-width: 900px;
-            height: 480px;
-            background: #000000;
-            border: 2px solid #111;
-            border-radius: 8px;
-            overflow: hidden;
-            perspective: 800px;
-        }
-
-        /* Elements that completely vanish */
-        .stage-props {
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            opacity: 0; /* Managed by JS timeline */
-        }
+        body { margin: 0; padding: 20px; background-color: #000; font-family: Arial, sans-serif; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .theater-stage { position: relative; width: 900px; height: 480px; background: #000; border: 2px solid #111; overflow: hidden; }
+        .stage-props { transition: all 0.5s ease; }
+        .vanished { opacity: 0; transform: scale(0); pointer-events: none; }
         
-        .vanished {
-            opacity: 0 !important;
-            transform: scale(0) !important;
-            pointer-events: none;
-        }
-
-        /* Hello World Title */
-        #stage-headline {
-            position: absolute;
-            top: 30px;
-            width: 100%;
-            text-align: center;
-            font-size: 52px;
-            font-weight: bold;
-            color: #00ffcc;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px #00ffcc;
-            transform: translateY(-20px);
-            z-index: 5;
-        }
-
-        /* Fixed Pakistan Flag Position */
-        .stage-flag {
-            position: absolute;
-            top: 40px;
-            right: 40px;
-            width: 110px;
-            height: 73px;
-            border: 1px solid rgba(255,255,255,0.3);
-            display: flex;
-            z-index: 5;
-            opacity: 1; /* Starts visible on the stage */
-        }
-        .flag-w { width: 25%; background: #ffffff; }
+        #stage-headline { position: absolute; top: 30px; width: 100%; text-align: center; font-size: 52px; font-weight: bold; color: #00ffcc; text-transform: uppercase; opacity: 0; }
+        .stage-flag { position: absolute; top: 40px; right: 40px; width: 110px; height: 73px; border: 1px solid rgba(255,255,255,0.3); display: flex; }
+        .flag-w { width: 25%; background: #fff; }
         .flag-g { width: 75%; background: #004124; position: relative; }
         .flag-svg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); width: 42px; height: 42px; }
 
-        /* --- MECHANICAL ROBOT ACTOR --- */
-        .robot-actor {
-            position: absolute;
-            bottom: 30px;
-            left: -120px;
-            width: 70px;
-            height: 110px;
-            z-index: 20;
-            transition: left 3.2s linear, bottom 1s ease, transform 1s ease, color 0.2s;
-            color: #00ffff; /* Neon Cyan chassis highlights */
-        }
-
-        .robot-svg {
-            width: 100%;
-            height: 100%;
-            overflow: visible;
-        }
-
-        /* Robot Metal Frame Shapes */
-        .metal-plate {
-            fill: #000000;
-            stroke: currentColor;
-            stroke-width: 3;
-            stroke-linejoin: miter;
-        }
-
-        .glowing-eye {
-            fill: currentColor;
-            transition: all 0.2s ease;
-        }
-
-        .robot-expression {
-            stroke: currentColor;
-            stroke-width: 3;
-            fill: none;
-            stroke-linecap: round;
-            transition: all 0.2s ease;
-        }
-
-        /* Fixed Mechanical Joint Pivots */
-        #bot-arm-l { transform-origin: 7px 45px; }
-        #bot-arm-r { transform-origin: 63px 45px; }
-        #bot-leg-l { transform-origin: 23px 81px; }
-        #bot-leg-r { transform-origin: 47px 81px; }
-
-        /* Marching Joint Motion */
-        .marching #bot-arm-l { animation: jointSwing 0.4s infinite alternate linear; }
-        .marching #bot-arm-r { animation: jointSwingInv 0.4s infinite alternate linear; }
-        .marching #bot-leg-l { animation: jointSwingInv 0.4s infinite alternate linear; }
-        .marching #bot-leg-r { animation: jointSwing 0.4s infinite alternate linear; }
-
-        @keyframes jointSwing { from { transform: rotate(-30deg); } to { transform: rotate(30deg); } }
-        @keyframes jointSwingInv { from { transform: rotate(30deg); } to { transform: rotate(-30deg); } }
-
-        /* Rapid-Fire Hand Wave */
-        .waving #bot-arm-r { animation: mechanicalWave 0.15s infinite alternate ease-in-out; }
-        @keyframes mechanicalWave { from { transform: rotate(15deg); } to { transform: rotate(135deg); } }
-
-        /* Child Tantrum Freakout */
-        .screaming-tantrum {
-            color: #ff3333 !important; /* Robot chassis flashes panic red */
-            animation: chassisVibrate 0.08s infinite alternate;
-        }
-        @keyframes chassisVibrate {
-            0% { transform: scale(1.5) translate(3px, 2px); }
-            100% { transform: scale(1.5) translate(-3px, -2px); }
-        }
-
-        /* --- THE PAPER AIRPLANE --- */
-        .paper-plane {
-            position: absolute;
-            left: -80px;
-            top: 220px;
-            width: 30px;
-            height: 30px;
-            z-index: 15;
-            display: none;
-        }
-        .plane-flying {
-            display: block;
-            animation: flyPass 2.8s linear forwards;
-        }
-        @keyframes flyPass {
-            0% { left: -80px; top: 240px; transform: rotate(5deg); }
-            100% { left: 110%; top: 130px; transform: rotate(-10deg); }
-        }
-
-        /* Heart Trail Particles */
-        .heart-particle {
-            position: absolute;
-            font-size: 14px;
-            color: #ff2a2a;
-            pointer-events: none;
-            z-index: 12;
-            animation: heartFade 0.7s ease-out forwards;
-            line-height: 1;
-        }
-        @keyframes heartFade {
-            0% { opacity: 0.9; transform: scale(1); }
-            100% { opacity: 0; transform: scale(2) translateY(15px); }
-        }
+        .robot-actor { position: absolute; bottom: 30px; left: -120px; width: 70px; height: 110px; z-index: 20; transition: all 0.5s linear; color: #00ffff; }
+        .metal-plate { fill: #000; stroke: currentColor; stroke-width: 3; }
+        .robot-expression { stroke: currentColor; stroke-width: 3; fill: none; }
+        
+        #bye-text { position: absolute; font-size: 30px; color: #fff; opacity: 0; transition: opacity 0.5s; }
+        
+        .marching #bot-arm-l { animation: swing 0.4s infinite alternate; }
+        @keyframes swing { from { transform: rotate(-30deg); } to { transform: rotate(30deg); } }
     </style>
 </head>
 <body>
 
     <div class="theater-stage" id="viewport">
-        
         <div id="stage-headline" class="stage-props">HELLO WORLD</div>
-        
         <div class="stage-flag stage-props" id="stageFlag">
             <div class="flag-w"></div>
-            <div class="flag-g">
-                <svg class="flag-svg" viewBox="0 0 100 100">
-                    <path d="M60,15 A35,35 0 1,0 95,50 A28,28 0 1,1 60,15 Z" fill="#ffffff"/>
-                    <polygon points="62,35 66,45 76,45 68,51 71,61 62,55 53,61 56,51 48,45 58,45" fill="#ffffff" transform="rotate(45, 62, 48)"/>
-                </svg>
-            </div>
+            <div class="flag-g"><svg class="flag-svg" viewBox="0 0 100 100"><path d="M60,15 A35,35 0 1,0 95,50" fill="#fff"/></svg></div>
         </div>
-
-        <div class="paper-plane" id="paperPlane">
-            <svg viewBox="0 0 24 24" fill="#ffffff">
-                <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
-            </svg>
-        </div>
-
+        <div id="bye-text">Bye! 👋</div>
         <div class="robot-actor" id="player">
-            <svg class="robot-svg" viewBox="0 0 70 120">
-                <rect class="metal-plate" x="31" y="35" width="8" height="6" />
-                
+            <svg viewBox="0 0 70 120">
                 <rect class="metal-plate" x="17" y="12" width="36" height="24" rx="3" />
-                <line class="robot-expression" x1="35" y1="12" x2="35" y2="4" />
-                <circle id="antenna-tip" cx="35" cy="4" r="2" fill="currentColor" />
-                
-                <circle class="glowing-eye" cx="27" cy="22" r="3" />
-                <circle class="glowing-eye" cx="43" cy="22" r="3" />
-                
-                <path id="mouth-line" class="robot-expression" d="M25,29 l20,0" />
-
                 <rect class="metal-plate" x="12" y="41" width="46" height="40" rx="4" />
-                <rect x="20" y="48" width="30" height="12" fill="none" stroke="currentColor" stroke-width="1.5" />
-                
-                <g id="bot-arm-l">
-                    <rect class="metal-plate" x="3" y="45" width="8" height="30" rx="2" />
-                </g>
-                
-                <g id="bot-arm-r">
-                    <rect class="metal-plate" x="59" y="45" width="8" height="30" rx="2" />
-                </g>
-                
-                <g id="bot-leg-l">
-                    <rect class="metal-plate" x="18" y="81" width="10" height="28" rx="2" />
-                </g>
-                
-                <g id="bot-leg-r">
-                    <rect class="metal-plate" x="42" y="81" width="10" height="28" rx="2" />
-                </g>
+                <g id="bot-arm-l"><rect class="metal-plate" x="3" y="45" width="8" height="30" /></g>
+                <path id="mouth-line" class="robot-expression" d="M25,29 l20,0" />
             </svg>
         </div>
     </div>
 
     <script>
         const actor = document.getElementById("player");
-        const stage = document.getElementById("viewport");
-        const title = document.getElementById("stage-headline");
         const flag = document.getElementById("stageFlag");
-        const plane = document.getElementById("paperPlane");
+        const bye = document.getElementById("bye-text");
         const mouth = document.getElementById("mouth-line");
 
-        // Step 1: Robot enters walking from the left side of the screen
-        setTimeout(() => {
-            actor.style.left = "22%";
-            actor.classList.add("marching");
-        }, 400);
+        // 1. Enter
+        setTimeout(() => { actor.style.left = "40%"; actor.classList.add("marching"); }, 500);
 
-        // Step 2: It marches ahead to the front of the screen (3D camera zoom closer)
-        setTimeout(() => {
-            actor.style.left = "46%";
-            actor.style.bottom = "50px";
-            actor.style.transform = "scale(1.5)"; 
-        }, 3600);
-
-        // Step 3: It stops moving, transitions to a digital smile, and waves hands
+        // 2. Cry
         setTimeout(() => {
             actor.classList.remove("marching");
-            
-            // Alter linear mouth vector path into a happy downward curved smile path
-            mouth.setAttribute("d", "M25,26 q10,8 20,0");
+            mouth.setAttribute("d", "M25,29 q10,-8 20,0"); // Sad mouth
+            actor.style.color = "red";
+        }, 3000);
 
-            // Engages the rapid-fire right arm waving routine
-            actor.classList.add("waving");
-        }, 4800);
-
-        // Step 4: As it waves, the Hello World title updates and transitions into place
+        // 3. Recover and grab flag
         setTimeout(() => {
-            title.style.opacity = "1";
-            title.style.transform = "translateY(0)";
-        }, 5400);
+            mouth.setAttribute("d", "M25,29 l20,0"); // Neutral
+            actor.style.color = "#00ffff";
+            flag.classList.add("vanished"); // Grabs flag
+        }, 5000);
 
-        // Step 5: The paper airplane flies across the stage leaving a heart trail
+        // 4. Run away with Bye
         setTimeout(() => {
-            plane.classList.add("plane-flying");
-            
-            const heartTrail = setInterval(() => {
-                const planeRect = plane.getBoundingClientRect();
-                const stageRect = stage.getBoundingClientRect();
-                
-                if(planeRect.left - stageRect.left > stageRect.width) {
-                    clearInterval(heartTrail);
-                    return;
-                }
-                
-                const heart = document.createElement('div');
-                heart.className = 'heart-particle';
-                heart.innerHTML = '❤️';
-                heart.style.left = (planeRect.left - stageRect.left) + 'px';
-                heart.style.top = (planeRect.top - stageRect.top + 10) + 'px';
-                stage.appendChild(heart);
-                
-                setTimeout(() => heart.remove(), 700);
-            }, 35);
-        }, 6600);
-
-        // Step 6: As the plane exits, the backdrop details fade into darkness
-        setTimeout(() => {
-            title.classList.add("vanished");
-            flag.classList.add("vanished");
-        }, 9400);
-
-        // Step 7: The robot goes into a meltdown (chassis shakes and flashes red)
-        setTimeout(() => {
-            actor.classList.remove("waving");
-            actor.classList.add("screaming-tantrum");
-
-            // Redraws the path expression into a massive circular open mechanical screaming mouth
-            mouth.setAttribute("d", "M27,28 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0");
-        }, 9900);
+            actor.style.left = "-200px";
+            bye.style.opacity = "1";
+            bye.style.left = "50px";
+            bye.style.top = "100px";
+        }, 6000);
     </script>
-
 </body>
 </html>
