@@ -9,37 +9,33 @@
         .stage-props { transition: all 0.5s ease; }
         .vanished { opacity: 0; transform: scale(0); pointer-events: none; }
         
-        #stage-headline { position: absolute; top: 30px; width: 100%; text-align: center; font-size: 52px; font-weight: bold; color: #00ffcc; text-transform: uppercase; opacity: 0; }
         .stage-flag { position: absolute; top: 40px; right: 40px; width: 110px; height: 73px; border: 1px solid rgba(255,255,255,0.3); display: flex; }
         .flag-w { width: 25%; background: #fff; }
         .flag-g { width: 75%; background: #004124; position: relative; }
         .flag-svg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); width: 42px; height: 42px; }
 
-        .robot-actor { position: absolute; bottom: 30px; left: -120px; width: 70px; height: 110px; z-index: 20; transition: all 0.5s linear; color: #00ffff; }
+        .robot-actor { position: absolute; bottom: 30px; left: -120px; width: 70px; height: 110px; z-index: 20; transition: all 1s linear; color: #00ffff; }
         .metal-plate { fill: #000; stroke: currentColor; stroke-width: 3; }
-        .robot-expression { stroke: currentColor; stroke-width: 3; fill: none; }
         
-        #bye-text { position: absolute; font-size: 30px; color: #fff; opacity: 0; transition: opacity 0.5s; }
+        #bye-text { position: absolute; font-size: 50px; font-weight: bold; color: #fff; opacity: 0; transition: opacity 0.3s; }
         
-        .marching #bot-arm-l { animation: swing 0.4s infinite alternate; }
+        .marching #bot-arm-l { animation: swing 0.3s infinite alternate; }
         @keyframes swing { from { transform: rotate(-30deg); } to { transform: rotate(30deg); } }
     </style>
 </head>
 <body>
 
     <div class="theater-stage" id="viewport">
-        <div id="stage-headline" class="stage-props">HELLO WORLD</div>
         <div class="stage-flag stage-props" id="stageFlag">
             <div class="flag-w"></div>
             <div class="flag-g"><svg class="flag-svg" viewBox="0 0 100 100"><path d="M60,15 A35,35 0 1,0 95,50" fill="#fff"/></svg></div>
         </div>
-        <div id="bye-text">Bye! 👋</div>
+        <div id="bye-text">BYE! 👋</div>
         <div class="robot-actor" id="player">
             <svg viewBox="0 0 70 120">
                 <rect class="metal-plate" x="17" y="12" width="36" height="24" rx="3" />
                 <rect class="metal-plate" x="12" y="41" width="46" height="40" rx="4" />
                 <g id="bot-arm-l"><rect class="metal-plate" x="3" y="45" width="8" height="30" /></g>
-                <path id="mouth-line" class="robot-expression" d="M25,29 l20,0" />
             </svg>
         </div>
     </div>
@@ -48,32 +44,25 @@
         const actor = document.getElementById("player");
         const flag = document.getElementById("stageFlag");
         const bye = document.getElementById("bye-text");
-        const mouth = document.getElementById("mouth-line");
 
-        // 1. Enter
-        setTimeout(() => { actor.style.left = "40%"; actor.classList.add("marching"); }, 500);
-
-        // 2. Cry
+        // 1. Enter and move to flag
         setTimeout(() => {
+            actor.style.left = "75%"; 
+            actor.classList.add("marching");
+        }, 500);
+
+        // 2. Grab flag and run
+        setTimeout(() => {
+            flag.classList.add("vanished"); // Flag disappears (grabbed)
             actor.classList.remove("marching");
-            mouth.setAttribute("d", "M25,29 q10,-8 20,0"); // Sad mouth
-            actor.style.color = "red";
-        }, 3000);
-
-        // 3. Recover and grab flag
-        setTimeout(() => {
-            mouth.setAttribute("d", "M25,29 l20,0"); // Neutral
-            actor.style.color = "#00ffff";
-            flag.classList.add("vanished"); // Grabs flag
-        }, 5000);
-
-        // 4. Run away with Bye
-        setTimeout(() => {
-            actor.style.left = "-200px";
+            actor.style.transition = "all 0.5s linear";
+            actor.style.left = "-200px"; // Run off screen
+            
+            // Show Bye text
             bye.style.opacity = "1";
-            bye.style.left = "50px";
-            bye.style.top = "100px";
-        }, 6000);
+            bye.style.left = "40%";
+            bye.style.top = "200px";
+        }, 3000);
     </script>
 </body>
 </html>
