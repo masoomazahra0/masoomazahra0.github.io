@@ -124,4 +124,193 @@
         .marching #bot-leg-l { animation: jointSwingInv 0.4s infinite alternate linear; }
         .marching #bot-leg-r { animation: jointSwing 0.4s infinite alternate linear; }
 
-        @keyframes joint
+        @keyframes jointSwing { from { transform: rotate(-30deg); } to { transform: rotate(30deg); } }
+        @keyframes jointSwingInv { from { transform: rotate(30deg); } to { transform: rotate(-30deg); } }
+
+        /* Rapid-Fire Hand Wave */
+        .waving #bot-arm-r { animation: mechanicalWave 0.18s infinite alternate ease-in-out; }
+        @keyframes mechanicalWave { from { transform: rotate(15deg); } to { transform: rotate(115deg); } }
+
+        /* Child Tantrum Freakout */
+        .screaming-tantrum {
+            color: #ff3333 !important; /* Entire metal outline flashes red */
+            animation: chassisVibrate 0.08s infinite alternate;
+        }
+        @keyframes chassisVibrate {
+            0% { transform: scale(1.5) translate(3px, 2px); }
+            100% { transform: scale(1.5) translate(-3px, -2px); }
+        }
+
+        /* --- THE PAPER AIRPLANE --- */
+        .paper-plane {
+            position: absolute;
+            left: -80px;
+            top: 220px;
+            width: 30px;
+            height: 30px;
+            z-index: 15;
+            display: none;
+        }
+        .plane-flying {
+            display: block;
+            animation: flyPass 2.8s linear forwards;
+        }
+        @keyframes flyPass {
+            0% { left: -80px; top: 240px; transform: rotate(5deg); }
+            100% { left: 110%; top: 130px; transform: rotate(-10deg); }
+        }
+
+        /* Heart Trail Particles */
+        .heart-particle {
+            position: absolute;
+            font-size: 14px;
+            color: #ff2a2a;
+            pointer-events: none;
+            z-index: 12;
+            animation: heartFade 0.7s ease-out forwards;
+            line-height: 1;
+        }
+        @keyframes heartFade {
+            0% { opacity: 0.9; transform: scale(1); }
+            100% { opacity: 0; transform: scale(2) translateY(15px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="theater-stage" id="viewport">
+        
+        <div id="stage-headline" class="stage-props">HELLO WORLD</div>
+        
+        <div class="stage-flag stage-props" id="stageFlag">
+            <div class="flag-w"></div>
+            <div class="flag-g">
+                <svg class="flag-svg" viewBox="0 0 100 100">
+                    <path d="M60,15 A35,35 0 1,0 95,50 A28,28 0 1,1 60,15 Z" fill="#ffffff"/>
+                    <polygon points="62,35 66,45 76,45 68,51 71,61 62,55 53,61 56,51 48,45 58,45" fill="#ffffff" transform="rotate(45, 62, 48)"/>
+                </svg>
+            </div>
+        </div>
+
+        <div class="paper-plane" id="paperPlane">
+            <svg viewBox="0 0 24 24" fill="#ffffff">
+                <path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+            </svg>
+        </div>
+
+        <div class="robot-actor" id="player">
+            <svg class="robot-svg" viewBox="0 0 70 120">
+                <rect class="metal-plate" x="31" y="35" width="8" height="6" />
+                
+                <rect class="metal-plate" x="17" y="12" width="36" height="24" rx="3" />
+                <line class="robot-expression" x1="35" y1="12" x2="35" y2="4" />
+                <circle id="antenna-tip" cx="35" cy="4" r="2" fill="currentColor" />
+                
+                <circle class="glowing-eye" cx="27" cy="22" r="3" />
+                <circle class="glowing-eye" cx="43" cy="22" r="3" />
+                
+                <path id="mouth-line" class="robot-expression" d="M25,29 l20,0" />
+
+                <rect class="metal-plate" x="12" y="41" width="46" height="40" rx="4" />
+                <rect x="20" y="48" width="30" height="12" fill="none" stroke="currentColor" stroke-width="1.5" />
+                
+                <g id="bot-arm-l">
+                    <rect class="metal-plate" x="3" y="45" width="8" height="30" rx="2" />
+                </g>
+                
+                <g id="bot-arm-r">
+                    <rect class="metal-plate" x="59" y="45" width="8" height="30" rx="2" />
+                </g>
+                
+                <g id="bot-leg-l">
+                    <rect class="metal-plate" x="18" y="81" width="10" height="28" rx="2" />
+                </g>
+                
+                <g id="bot-leg-r">
+                    <rect class="metal-plate" x="42" y="81" width="10" height="28" rx="2" />
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <script>
+        const actor = document.getElementById("player");
+        const stage = document.getElementById("viewport");
+        const title = document.getElementById("stage-headline");
+        const flag = document.getElementById("stageFlag");
+        const plane = document.getElementById("paperPlane");
+        
+        const mouth = document.getElementById("mouth-line");
+
+        // Step 1: Robot comes walking through the left side of the screen
+        setTimeout(() => {
+            actor.style.left = "22%";
+            actor.classList.add("marching");
+        }, 400);
+
+        // Step 2: It comes ahead to the front of the screen (3D camera zoom closer)
+        setTimeout(() => {
+            actor.style.left = "46%";
+            actor.style.bottom = "50px";
+            actor.style.transform = "scale(1.5)"; 
+        }, 3600);
+
+        // Step 3: It stops moving, opens up a wide digital mechanical smile, and waves hands
+        setTimeout(() => {
+            actor.classList.remove("marching");
+            
+            // Adjust linear mouth path into a happy downward curved smile path
+            mouth.setAttribute("d", "M25,26 q10,8 20,0");
+
+            // Starts right arm waving sequence
+            actor.classList.add("waving");
+        }, 4800);
+
+        // Step 4: As it waves the hand, Hello World updates and pops into place
+        setTimeout(() => {
+            title.style.opacity = "1";
+            title.style.transform = "translateY(0)";
+        }, 5400);
+
+        // Step 5: The paper airplane passes by leaving its trail of red hearts
+        setTimeout(() => {
+            plane.classList.add("plane-flying");
+            
+            const heartTrail = setInterval(() => {
+                const planeRect = plane.getBoundingClientRect();
+                const stageRect = stage.getBoundingClientRect();
+                
+                if(planeRect.left - stageRect.left > stageRect.width) {
+                    clearInterval(heartTrail);
+                    return;
+                }
+                
+                const heart = document.createElement('div');
+                heart.className = 'heart-particle';
+                heart.innerHTML = '❤️';
+                heart.style.left = (planeRect.left - stageRect.left) + 'px';
+                heart.style.top = (planeRect.top - stageRect.top + 10) + 'px';
+                stage.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 700);
+            }, 35);
+        }, 6600);
+
+        // Step 6: As the airplane passes by, Hello World and everything else disappears
+        setTimeout(() => {
+            title.classList.add("vanished");
+            flag.classList.add("vanished");
+        }, 9400);
+
+        // Step 7: The robot screams like a little kid (shaking and flashing panic red)
+        setTimeout(() => {
+            actor.classList.remove("waving");
+            actor.classList.add("screaming-tantrum");
+
+            // Redraws the path expression line into a massive open circular screaming mouth
+            mouth.setAttribute("d", "M27,28 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0");
+        }, 9900);
+    </script>
+
+</body>
+</html>
