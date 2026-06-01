@@ -32,8 +32,10 @@
 
         /* Elements that completely vanish */
         .stage-props {
-            transition: opacity 0.25s ease, transform 0.25s ease;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            opacity: 0; /* Managed by JS timeline */
         }
+        
         .vanished {
             opacity: 0 !important;
             transform: scale(0) !important;
@@ -52,9 +54,7 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             text-shadow: 0 0 15px #00ffcc;
-            opacity: 0;
             transform: translateY(-20px);
-            transition: all 0.5s ease;
             z-index: 5;
         }
 
@@ -68,6 +68,7 @@
             border: 1px solid rgba(255,255,255,0.3);
             display: flex;
             z-index: 5;
+            opacity: 1; /* Starts visible on the stage */
         }
         .flag-w { width: 25%; background: #ffffff; }
         .flag-g { width: 75%; background: #004124; position: relative; }
@@ -82,7 +83,7 @@
             height: 110px;
             z-index: 20;
             transition: left 3.2s linear, bottom 1s ease, transform 1s ease, color 0.2s;
-            color: #00ffff; /* Neon Cyan highlights */
+            color: #00ffff; /* Neon Cyan chassis highlights */
         }
 
         .robot-svg {
@@ -112,11 +113,11 @@
             transition: all 0.2s ease;
         }
 
-        /* Joint Pivot Locations */
-        #bot-arm-l { transform-origin: 15px 45px; }
-        #bot-arm-r { transform-origin: 55px 45px; }
-        #bot-leg-l { transform-origin: 22px 80px; }
-        #bot-leg-r { transform-origin: 48px 80px; }
+        /* Fixed Mechanical Joint Pivots */
+        #bot-arm-l { transform-origin: 7px 45px; }
+        #bot-arm-r { transform-origin: 63px 45px; }
+        #bot-leg-l { transform-origin: 23px 81px; }
+        #bot-leg-r { transform-origin: 47px 81px; }
 
         /* Marching Joint Motion */
         .marching #bot-arm-l { animation: jointSwing 0.4s infinite alternate linear; }
@@ -128,12 +129,12 @@
         @keyframes jointSwingInv { from { transform: rotate(30deg); } to { transform: rotate(-30deg); } }
 
         /* Rapid-Fire Hand Wave */
-        .waving #bot-arm-r { animation: mechanicalWave 0.18s infinite alternate ease-in-out; }
-        @keyframes mechanicalWave { from { transform: rotate(15deg); } to { transform: rotate(115deg); } }
+        .waving #bot-arm-r { animation: mechanicalWave 0.15s infinite alternate ease-in-out; }
+        @keyframes mechanicalWave { from { transform: rotate(15deg); } to { transform: rotate(135deg); } }
 
         /* Child Tantrum Freakout */
         .screaming-tantrum {
-            color: #ff3333 !important; /* Entire metal outline flashes red */
+            color: #ff3333 !important; /* Robot chassis flashes panic red */
             animation: chassisVibrate 0.08s infinite alternate;
         }
         @keyframes chassisVibrate {
@@ -239,40 +240,39 @@
         const title = document.getElementById("stage-headline");
         const flag = document.getElementById("stageFlag");
         const plane = document.getElementById("paperPlane");
-        
         const mouth = document.getElementById("mouth-line");
 
-        // Step 1: Robot comes walking through the left side of the screen
+        // Step 1: Robot enters walking from the left side of the screen
         setTimeout(() => {
             actor.style.left = "22%";
             actor.classList.add("marching");
         }, 400);
 
-        // Step 2: It comes ahead to the front of the screen (3D camera zoom closer)
+        // Step 2: It marches ahead to the front of the screen (3D camera zoom closer)
         setTimeout(() => {
             actor.style.left = "46%";
             actor.style.bottom = "50px";
             actor.style.transform = "scale(1.5)"; 
         }, 3600);
 
-        // Step 3: It stops moving, opens up a wide digital mechanical smile, and waves hands
+        // Step 3: It stops moving, transitions to a digital smile, and waves hands
         setTimeout(() => {
             actor.classList.remove("marching");
             
-            // Adjust linear mouth path into a happy downward curved smile path
+            // Alter linear mouth vector path into a happy downward curved smile path
             mouth.setAttribute("d", "M25,26 q10,8 20,0");
 
-            // Starts right arm waving sequence
+            // Engages the rapid-fire right arm waving routine
             actor.classList.add("waving");
         }, 4800);
 
-        // Step 4: As it waves the hand, Hello World updates and pops into place
+        // Step 4: As it waves, the Hello World title updates and transitions into place
         setTimeout(() => {
             title.style.opacity = "1";
             title.style.transform = "translateY(0)";
         }, 5400);
 
-        // Step 5: The paper airplane passes by leaving its trail of red hearts
+        // Step 5: The paper airplane flies across the stage leaving a heart trail
         setTimeout(() => {
             plane.classList.add("plane-flying");
             
@@ -296,18 +296,18 @@
             }, 35);
         }, 6600);
 
-        // Step 6: As the airplane passes by, Hello World and everything else disappears
+        // Step 6: As the plane exits, the backdrop details fade into darkness
         setTimeout(() => {
             title.classList.add("vanished");
             flag.classList.add("vanished");
         }, 9400);
 
-        // Step 7: The robot screams like a little kid (shaking and flashing panic red)
+        // Step 7: The robot goes into a meltdown (chassis shakes and flashes red)
         setTimeout(() => {
             actor.classList.remove("waving");
             actor.classList.add("screaming-tantrum");
 
-            // Redraws the path expression line into a massive open circular screaming mouth
+            // Redraws the path expression into a massive circular open mechanical screaming mouth
             mouth.setAttribute("d", "M27,28 a8,8 0 1,0 16,0 a8,8 0 1,0 -16,0");
         }, 9900);
     </script>
