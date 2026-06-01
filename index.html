@@ -1,187 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Robot Animation</title>
-<style>
-  body {
-    margin: 0;
-    overflow: hidden;
-    background: black;
-    color: white;
-    font-family: Arial, sans-serif;
-  }
+    <meta charset="UTF-8" />
+    <title>Masooma Zahra | Dramatic Animation Stage</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            line-height: 1.6; 
+            padding: 40px; 
+            max-width: 800px; 
+            margin: auto; 
+            color: #333; 
+            background-color: #fafafa; 
+        }
+        h1 { color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; margin-top: 40px; }
+        h2 { color: #16a085; margin-top: 30px; }
+        .highlight { font-weight: bold; color: #2c3e50; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
 
-  #hello {
-    position: absolute;
-    top: 20px;
-    width: 100%;
-    text-align: center;
-    font-size: 0px;
-    font-weight: bold;
-    opacity: 0;
-    transition: all 0.5s ease;
-  }
+        /* --- THE DRAMATIC THEATER STAGE --- */
+        .theater-stage {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, #0b131a, #111e25);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            margin-bottom: 35px;
+            perspective: 600px; /* Allows the robot to step "forward" in 3D space */
+        }
 
-  #scene {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-  }
+        /* Elements that will completely vanish */
+        .disappearing-act {
+            transition: opacity 0.4s cubic-bezier(0.6, -0.28, 0.735, 0.045), transform 0.4s ease;
+        }
+        .vanished {
+            opacity: 0 !important;
+            transform: scale(0) translateY(-100px) !important;
+            pointer-events: none;
+        }
 
-  .robot {
-    position: absolute;
-    bottom: 80px;
-    left: -150px;
-    width: 100px;
-    transition: left 4s linear;
-  }
+        /* Headline Overlay */
+        #stage-headline {
+            position: absolute;
+            top: 40px;
+            width: 100%;
+            text-align: center;
+            font-size: 40px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 3px;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10;
+        }
 
-  .head {
-    width: 60px;
-    height: 60px;
-    background: gray;
-    border-radius: 10px;
-    margin: auto;
-    position: relative;
-  }
+        /* Flag Positioning */
+        .stage-flag {
+            position: absolute;
+            top: 110px;
+            left: 10%;
+            width: 80%;
+            height: 80px;
+            border-radius: 6px;
+            display: flex;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.6s ease;
+            z-index: 5;
+        }
 
-  .eye {
-    width: 8px;
-    height: 8px;
-    background: cyan;
-    border-radius: 50%;
-    position: absolute;
-    top: 20px;
-  }
+        .flag-w { width: 25%; background: #fff; }
+        .flag-g { width: 75%; background: #004124; position: relative; }
+        .flag-svg { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); width: 45px; height: 45px; }
 
-  .eye.left { left: 15px; }
-  .eye.right { right: 15px; }
+        /* Cinematic Airplane */
+        .stage-jet {
+            position: absolute;
+            left: -100px;
+            top: 130px;
+            font-size: 40px;
+            z-index: 30;
+            display: none;
+            line-height: 1;
+        }
+        .jet-fly-animation {
+            display: block;
+            animation: flightPath 3.5s linear forwards;
+        }
+        @keyframes flightPath {
+            0% { left: -100px; top: 140px; transform: scale(0.7); }
+            50% { top: 110px; transform: scale(1.1); }
+            100% { left: 110%; top: 80px; transform: scale(1.4); }
+        }
 
-  .mouth {
-    width: 20px;
-    height: 5px;
-    background: black;
-    position: absolute;
-    bottom: 10px;
-    left: 20px;
-    transition: all 0.3s;
-  }
+        /* Jet Particles */
+        .jet-exhaust {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: 25;
+            animation: scatter 0.6s ease-out forwards;
+        }
+        @keyframes scatter {
+            0% { opacity: 0.9; transform: scale(1); }
+            100% { opacity: 0; transform: scale(3) translateY(-15px); }
+        }
 
-  .body {
-    width: 80px;
-    height: 70px;
-    background: #888;
-    margin: auto;
-    border-radius: 10px;
-  }
+        /* --- THE ACTOR: ROBOT --- */
+        .actor-robot {
+            position: absolute;
+            bottom: 20px;
+            left: -150px;
+            width: 100px;
+            z-index: 20;
+            transform-style: preserve-3d;
+            transition: left 3.5s linear, bottom 1.2s ease, transform 1.2s ease;
+        }
 
-  .arm {
-    width: 10px;
-    height: 50px;
-    background: gray;
-    position: absolute;
-    top: 80px;
-  }
+        .r-head {
+            width: 60px;
+            height: 60px;
+            background: #7f8c8d;
+            border-radius: 12px;
+            margin: auto;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+        }
 
-  .arm.left { left: -15px; transform-origin: top; }
-  .arm.right { right: -15px; transform-origin: top; }
+        .r-eye {
+            width: 8px;
+            height: 8px;
+            background: #00ffff;
+            border-radius: 50%;
+            position: absolute;
+            top: 18px;
+            box-shadow: 0 0 8px #00ffff;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .r-eye.left { left: 14px; }
+        .r-eye.right { right: 14px; }
 
-  .walk {
-    animation: walkArms 0.5s infinite alternate;
-  }
+        .r-mouth {
+            width: 24px;
+            height: 4px;
+            background: #2c3e50;
+            position: absolute;
+            bottom: 12px;
+            left: 18px;
+            border-radius: 2px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-  @keyframes walkArms {
-    from { transform: rotate(-20deg); }
-    to { transform: rotate(20deg); }
-  }
+        .r-body {
+            width: 80px;
+            height: 75px;
+            background: #95a5a6;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        }
 
-  .wave {
-    animation: wave 0.5s infinite alternate;
-  }
+        .r-arm {
+            width: 12px;
+            height: 50px;
+            background: #7f8c8d;
+            position: absolute;
+            top: 72px;
+        }
+        .r-arm.left { left: -4px; transform-origin: top; }
+        .r-arm.right { right: -4px; transform-origin: top; }
 
-  @keyframes wave {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(60deg); }
-  }
-
-  .shake {
-    animation: shake 0.2s infinite;
-  }
-
-  @keyframes shake {
-    0% { transform: translate(0,0); }
-    25% { transform: translate(5px, -5px); }
-    50% { transform: translate(-5px, 5px); }
-    75% { transform: translate(5px, 5px); }
-    100% { transform: translate(-5px, -5px); }
-  }
-</style>
-</head>
-<body>
-
-<div id="hello">HELLO WORLD</div>
-
-<div id="scene">
-  <div class="robot" id="robot">
-    <div class="head" id="head">
-      <div class="eye left"></div>
-      <div class="eye right"></div>
-      <div class="mouth" id="mouth"></div>
-    </div>
-    <div class="body"></div>
-    <div class="arm left" id="armL"></div>
-    <div class="arm right" id="armR"></div>
-  </div>
-</div>
-
-<script>
-const robot = document.getElementById("robot");
-const hello = document.getElementById("hello");
-const mouth = document.getElementById("mouth");
-const armL = document.getElementById("armL");
-const armR = document.getElementById("armR");
-const head = document.getElementById("head");
-
-// Step 1: Walk to center
-setTimeout(() => {
-  robot.style.left = "45%";
-  robot.classList.add("walk");
-}, 500);
-
-// Step 2: Stop, smile, wave
-setTimeout(() => {
-  robot.classList.remove("walk");
-  mouth.style.height = "15px";
-  mouth.style.borderRadius = "10px";
-
-  armR.classList.add("wave");
-}, 4500);
-
-// Step 3: Hello World appears and pops
-setTimeout(() => {
-  hello.style.opacity = "1";
-  hello.style.fontSize = "60px";
-
-  setTimeout(() => {
-    hello.style.transform = "scale(1.5)";
-  }, 500);
-
-}, 6000);
-
-// Step 4: Robot screams (shake effect)
-setTimeout(() => {
-  document.body.classList.add("shake");
-  mouth.style.background = "red";
-  mouth.style.height = "30px";
-  hello.innerText = "!!! HELLO WORLD !!!";
-}, 7500);
-
-setTimeout(() => {
-  document.body.classList.remove("shake");
-  armR.classList.remove("wave");
-}, 9000);
-</script>
-
-</body>
-</html>
+        /* Animation States */
+        .marching .r-arm.left { animation: swingL 0.4s infinite alternate linear; }
+        .marching .r-arm.right { animation: swingR 0.4s infinite alternate linear; }
+        @keyframes swingL { from { transform: rotate(-25deg); } to {
