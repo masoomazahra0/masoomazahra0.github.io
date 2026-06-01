@@ -1,200 +1,186 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8" />
-<title>Animated Scene v2</title>
-
+<meta charset="UTF-8" />
+<title>Robot Animation</title>
 <style>
-body {
-  margin: 0;
-  overflow: hidden;
-  background: radial-gradient(circle, #000010, #000);
-  font-family: Arial;
-}
+  body {
+    margin: 0;
+    overflow: hidden;
+    background: black;
+    color: white;
+    font-family: Arial, sans-serif;
+  }
 
-/* Glow text */
-#hello {
-  position: absolute;
-  top: 30px;
-  width: 100%;
-  text-align: center;
-  font-size: 55px;
-  color: #00ffd5;
-  text-shadow: 0 0 10px #00ffd5, 0 0 25px #00ffd5;
-  animation: glow 2s infinite alternate;
-}
+  #hello {
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    text-align: center;
+    font-size: 0px;
+    font-weight: bold;
+    opacity: 0;
+    transition: all 0.5s ease;
+  }
 
-@keyframes glow {
-  from { transform: scale(1); }
-  to { transform: scale(1.1); }
-}
+  #scene {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  }
 
-/* Flag */
-#flag {
-  position: absolute;
-  right: 20px;
-  top: 100px;
-  width: 140px;
-  height: 90px;
-  border: 2px solid white;
-  animation: pop 2s infinite alternate;
-}
+  .robot {
+    position: absolute;
+    bottom: 80px;
+    left: -150px;
+    width: 100px;
+    transition: left 4s linear;
+  }
 
-@keyframes pop {
-  from { transform: scale(0.9); }
-  to { transform: scale(1.05); }
-}
+  .head {
+    width: 60px;
+    height: 60px;
+    background: gray;
+    border-radius: 10px;
+    margin: auto;
+    position: relative;
+  }
+
+  .eye {
+    width: 8px;
+    height: 8px;
+    background: cyan;
+    border-radius: 50%;
+    position: absolute;
+    top: 20px;
+  }
+
+  .eye.left { left: 15px; }
+  .eye.right { right: 15px; }
+
+  .mouth {
+    width: 20px;
+    height: 5px;
+    background: black;
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+    transition: all 0.3s;
+  }
+
+  .body {
+    width: 80px;
+    height: 70px;
+    background: #888;
+    margin: auto;
+    border-radius: 10px;
+  }
+
+  .arm {
+    width: 10px;
+    height: 50px;
+    background: gray;
+    position: absolute;
+    top: 80px;
+  }
+
+  .arm.left { left: -15px; transform-origin: top; }
+  .arm.right { right: -15px; transform-origin: top; }
+
+  .walk {
+    animation: walkArms 0.5s infinite alternate;
+  }
+
+  @keyframes walkArms {
+    from { transform: rotate(-20deg); }
+    to { transform: rotate(20deg); }
+  }
+
+  .wave {
+    animation: wave 0.5s infinite alternate;
+  }
+
+  @keyframes wave {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(60deg); }
+  }
+
+  .shake {
+    animation: shake 0.2s infinite;
+  }
+
+  @keyframes shake {
+    0% { transform: translate(0,0); }
+    25% { transform: translate(5px, -5px); }
+    50% { transform: translate(-5px, 5px); }
+    75% { transform: translate(5px, 5px); }
+    100% { transform: translate(-5px, -5px); }
+  }
 </style>
 </head>
-
 <body>
 
 <div id="hello">HELLO WORLD</div>
 
-<!-- 🇵🇰 Pakistan Flag (correct crescent + star) -->
-<svg id="flag" viewBox="0 0 60 40">
-  <rect width="60" height="40" fill="#006600"/>
-
-  <!-- white stripe -->
-  <rect width="15" height="40" fill="white"/>
-
-  <!-- crescent -->
-  <circle cx="38" cy="20" r="10" fill="white"/>
-  <circle cx="41" cy="20" r="8" fill="#006600"/>
-
-  <!-- star -->
-  <polygon points="48,14 50,20 56,20 51,24 53,30 48,26 43,30 45,24 40,20 46,20"
-           fill="white"/>
-</svg>
-
-<canvas id="canvas"></canvas>
+<div id="scene">
+  <div class="robot" id="robot">
+    <div class="head" id="head">
+      <div class="eye left"></div>
+      <div class="eye right"></div>
+      <div class="mouth" id="mouth"></div>
+    </div>
+    <div class="body"></div>
+    <div class="arm left" id="armL"></div>
+    <div class="arm right" id="armR"></div>
+  </div>
+</div>
 
 <script>
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+const robot = document.getElementById("robot");
+const hello = document.getElementById("hello");
+const mouth = document.getElementById("mouth");
+const armL = document.getElementById("armL");
+const armR = document.getElementById("armR");
+const head = document.getElementById("head");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+// Step 1: Walk to center
+setTimeout(() => {
+  robot.style.left = "45%";
+  robot.classList.add("walk");
+}, 500);
 
-// Jet
-let jetX = 0;
-let jetY = 180;
+// Step 2: Stop, smile, wave
+setTimeout(() => {
+  robot.classList.remove("walk");
+  mouth.style.height = "15px";
+  mouth.style.borderRadius = "10px";
 
-// particles (hearts)
-let hearts = [];
+  armR.classList.add("wave");
+}, 4500);
 
-// robot (human-like)
-let robotX = 0;
-let dir = 2;
+// Step 3: Hello World appears and pops
+setTimeout(() => {
+  hello.style.opacity = "1";
+  hello.style.fontSize = "60px";
 
-function drawJet(x, y) {
-  ctx.fillStyle = "#ffffff";
+  setTimeout(() => {
+    hello.style.transform = "scale(1.5)";
+  }, 500);
 
-  ctx.beginPath();
-  ctx.moveTo(x, y);
-  ctx.lineTo(x + 40, y + 10);
-  ctx.lineTo(x, y - 10);
-  ctx.closePath();
-  ctx.fill();
+}, 6000);
 
-  // wings
-  ctx.beginPath();
-  ctx.moveTo(x + 15, y);
-  ctx.lineTo(x + 5, y + 20);
-  ctx.lineTo(x + 25, y + 10);
-  ctx.fill();
-}
+// Step 4: Robot screams (shake effect)
+setTimeout(() => {
+  document.body.classList.add("shake");
+  mouth.style.background = "red";
+  mouth.style.height = "30px";
+  hello.innerText = "!!! HELLO WORLD !!!";
+}, 7500);
 
-// ❤️ heart particle
-function createHeart(x, y) {
-  hearts.push({
-    x,
-    y,
-    size: Math.random() * 6 + 4,
-    alpha: 1,
-    vy: Math.random() * 1 + 0.5
-  });
-}
-
-function drawHearts() {
-  for (let h of hearts) {
-    ctx.save();
-    ctx.globalAlpha = h.alpha;
-    ctx.fillStyle = "red";
-
-    ctx.beginPath();
-    ctx.moveTo(h.x, h.y);
-    ctx.bezierCurveTo(h.x - h.size, h.y - h.size,
-                      h.x - h.size*1.5, h.y + h.size/2,
-                      h.x, h.y + h.size);
-    ctx.bezierCurveTo(h.x + h.size*1.5, h.y + h.size/2,
-                      h.x + h.size, h.y - h.size,
-                      h.x, h.y);
-    ctx.fill();
-
-    ctx.restore();
-
-    h.y += h.vy;
-    h.alpha -= 0.02;
-  }
-
-  hearts = hearts.filter(h => h.alpha > 0);
-}
-
-// 👤 simple human robot
-function drawRobot(x, y) {
-  ctx.strokeStyle = "#00ffcc";
-  ctx.lineWidth = 3;
-
-  // head
-  ctx.beginPath();
-  ctx.arc(x, y - 40, 10, 0, Math.PI * 2);
-  ctx.stroke();
-
-  // body
-  ctx.beginPath();
-  ctx.moveTo(x, y - 30);
-  ctx.lineTo(x, y);
-  ctx.stroke();
-
-  // arms
-  ctx.beginPath();
-  ctx.moveTo(x, y - 20);
-  ctx.lineTo(x - 15, y - 10);
-  ctx.moveTo(x, y - 20);
-  ctx.lineTo(x + 15, y - 10);
-  ctx.stroke();
-
-  // legs (walking motion)
-  ctx.beginPath();
-  ctx.moveTo(x, y);
-  ctx.lineTo(x - 10, y + 20);
-  ctx.moveTo(x, y);
-  ctx.lineTo(x + 10, y + 20);
-  ctx.stroke();
-}
-
-function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // jet movement
-  jetX += 4;
-  if (jetX > canvas.width) jetX = -50;
-
-  drawJet(jetX, jetY);
-  createHeart(jetX, jetY);
-  drawHearts();
-
-  // robot movement
-  robotX += dir;
-  if (robotX > canvas.width - 50 || robotX < 50) dir *= -1;
-
-  drawRobot(robotX, canvas.height - 80);
-
-  requestAnimationFrame(animate);
-}
-
-animate();
+setTimeout(() => {
+  document.body.classList.remove("shake");
+  armR.classList.remove("wave");
+}, 9000);
 </script>
 
 </body>
