@@ -10,131 +10,128 @@
         ul { padding-left: 20px; }
         li { margin-bottom: 8px; }
 
-        /* --- AMAZING EYE-CATCHING ANIMATION STYLES --- */
-        .animation-container {
-            position: relative;
+        /* --- CLEAN, FIXED ANIMATION CONTAINER --- */
+        .hero-banner {
             background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            height: 250px;
             border-radius: 12px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
             margin-bottom: 30px;
+            overflow: hidden;
+            position: relative;
+            height: 220px;
+            box-sizing: border-box;
         }
 
         .hello-world {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: bold;
             color: #fff;
             text-transform: uppercase;
             letter-spacing: 4px;
-            text-shadow: 0 0 10px #16a085, 0 0 20px #16a085, 0 0 30px #16a085;
+            margin: 0 0 25px 0;
+            display: inline-block;
             animation: glow 2s ease-in-out infinite alternate;
-            z-index: 2;
-            margin: 0;
         }
 
         @keyframes glow {
-            from { text-shadow: 0 0 10px #fff, 0 0 20px #16a085, 0 0 30px #117a65; }
-            to { text-shadow: 0 0 20px #fff, 0 0 30px #1abc9c, 0 0 40px #1abc9c; }
+            from { text-shadow: 0 0 10px #fff, 0 0 20px #1abc9c, 0 0 30px #117a65; }
+            to { text-shadow: 0 0 20px #fff, 0 0 30px #2ecc71, 0 0 40px #27ae60; }
         }
 
-        /* The Airplane */
-        .airplane {
-            position: absolute;
-            left: -100px;
-            top: 65%;
-            font-size: 32px;
-            transform: rotate(90deg);
-            animation: flyThrough 6s linear infinite;
-            z-index: 4;
-        }
-
-        @keyframes flyThrough {
-            0% { left: -100px; top: 65%; transform: rotate(45deg); }
-            50% { top: 45%; }
-            100% { left: 110%; top: 25%; transform: rotate(45deg); }
-        }
-
-        /* Pakistan Flag Reveal Container */
-        .flag-holder {
-            position: absolute;
-            bottom: 20px;
-            width: 180px;
-            height: 120px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            border: 2px solid rgba(255,255,255,0.2);
+        /* --- PROPERLY PROPORTIONED PAKISTAN FLAG BANNER --- */
+        .flag-banner {
+            width: 100%;
+            height: 100px;
+            border-radius: 6px;
             display: flex;
-            opacity: 0;
-            transform: scale(0.8);
-            animation: revealFlag 3s ease-out forwards;
-            animation-delay: 2s; /* Waits for the plane to fly past */
-            z-index: 3;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            position: relative;
         }
 
-        @keyframes revealFlag {
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        /* Pakistan Flag Design using pure CSS */
-        .flag-white-bar {
+        .flag-white {
             width: 25%;
             background-color: #ffffff;
         }
 
-        .flag-dark-green {
+        .flag-green {
             width: 75%;
             background-color: #004124;
             position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
-        /* Crescent Moon */
-        .crescent {
+        /* Perfectly centered svg crescent and star so they never shift */
+        .flag-emblem {
             position: absolute;
-            width: 45px;
-            height: 45px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            width: 60px;
+            height: 60px;
+        }
+
+        /* --- FLYING JET --- */
+        .airplane {
+            position: absolute;
+            left: -50px;
+            top: 45px;
+            font-size: 28px;
+            z-index: 10;
+            animation: flyAcross 5s linear infinite;
+            line-height: 1;
+        }
+
+        @keyframes flyAcross {
+            0% { left: -50px; transform: scaleX(1); }
+            45% { left: 110%; transform: scaleX(1); }
+            /* Turn around and fly back right to left */
+            50% { left: 110%; transform: scaleX(-1); }
+            95% { left: -50px; transform: scaleX(-1); }
+            100% { left: -50px; transform: scaleX(1); }
+        }
+
+        /* --- DYNAMIC JET TRAIL PARTICLES --- */
+        .particle {
+            position: absolute;
+            pointer-events: none;
             border-radius: 50%;
-            box-shadow: -12px 12px 0 0 #ffffff;
-            transform: rotate(-45deg);
-            left: 28px;
-            top: 25px;
+            z-index: 5;
+            animation: fadeOutParticle 0.8s ease-out forwards;
         }
 
-        /* Star */
-        .star {
-            position: absolute;
-            top: 38px;
-            left: 62px;
-            font-size: 18px;
-            color: #ffffff;
-            transform: rotate(15deg);
+        @keyframes fadeOutParticle {
+            0% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(2.5) translateY(-10px); }
         }
     </style>
 </head>
 <body>
 
-    <!-- ANIMATION CANVAS -->
-    <div class="animation-container">
+    <!-- HERO SECTION -->
+    <div class="hero-banner" id="heroBanner">
         <div class="hello-world">Hello World</div>
-        <div class="airplane">✈️</div>
         
-        <!-- Pakistan Flag -->
-        <div class="flag-holder">
-            <div class="flag-white-bar"></div>
-            <div class="flag-dark-green">
-                <div class="crescent"></div>
-                <div class="star">★</div>
+        <!-- Continuous Airplane Track -->
+        <div class="airplane" id="jet">✈️</div>
+
+        <!-- Corrected Pakistan Flag Layout -->
+        <div class="flag-banner">
+            <div class="flag-white"></div>
+            <div class="flag-green">
+                <!-- Clean vector moon and star that won't distort -->
+                <svg class="flag-emblem" viewBox="0 0 100 100">
+                    <!-- Crescent Moon -->
+                    <path d="M60,15 A35,35 0 1,0 95,50 A28,28 0 1,1 60,15 Z" fill="#ffffff"/>
+                    <!-- Star -->
+                    <polygon points="62,35 66,45 76,45 68,51 71,61 62,55 53,61 56,51 48,45 58,45" fill="#ffffff" transform="rotate(45, 62, 48)"/>
+                </svg>
             </div>
         </div>
     </div>
 
-    <!-- YOUR PROFILE INFO -->
+    <!-- MAIN PROFILE CONTENT -->
     <h1>Masooma Zahra</h1>
     <p>
       I am an <span class="highlight">Electrical Engineering</span> student at UMass Boston specializing in the intersection of autonomous systems, hardware-software integration, and technology policy. Guided by a commitment to open science and accessibility, my work ranges from designing intelligent edge-computing logic to engineering human-centric prototypes like the <strong>Visual Caption Board (VCB)</strong> project.
@@ -149,6 +146,51 @@
         <li><strong>Accessibility Engineering:</strong> Prototyping hardware and custom display workflows to enhance communication safety.</li>
         <li><strong>Creative Writing:</strong> Authoring motivational literature and poetry centered around resilience and community empowerment.</li>
     </ul>
+
+    <!-- TRAIL PARTICLE SCRIPT -->
+    <script>
+        const container = document.getElementById('heroBanner');
+        const jet = document.getElementById('jet');
+
+        function createTrail() {
+            // Get the exact live position of the jet inside the container
+            const jetRect = jet.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+
+            const x = jetRect.left - containerRect.left + (jetRect.width / 2);
+            const y = jetRect.top - containerRect.top + (jetRect.height / 2) + 5;
+
+            // 1. Create a Smoke Cloud
+            const smoke = document.createElement('div');
+            smoke.className = 'particle';
+            smoke.style.left = x + 'px';
+            smoke.style.top = y + 'px';
+            smoke.style.width = '8px';
+            smoke.style.height = '8px';
+            smoke.style.backgroundColor = 'rgba(240, 240, 240, 0.4)';
+            container.appendChild(smoke);
+
+            // 2. Create a Sparkle
+            const sparkle = document.createElement('div');
+            sparkle.className = 'particle';
+            sparkle.style.left = (x + (Math.random() * 14 - 7)) + 'px';
+            sparkle.style.top = (y + (Math.random() * 14 - 7)) + 'px';
+            sparkle.style.width = '4px';
+            sparkle.style.height = '4px';
+            sparkle.style.backgroundColor = Math.random() > 0.5 ? '#f1c40f' : '#ffffff'; // Gold or white sparkles
+            sparkle.style.boxShadow = '0 0 8px #f1c40f';
+            container.appendChild(sparkle);
+
+            // Remove elements from code after animation finishes to keep memory clean
+            setTimeout(() => {
+                smoke.remove();
+                sparkle.remove();
+            }, 800);
+        }
+
+        // Generate trails continuously every 40 milliseconds
+        setInterval(createTrail, 40);
+    </script>
 
 </body>
 </html>
