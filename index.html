@@ -1,196 +1,160 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Masooma Zahra | Portfolio</title>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; padding: 40px; max-width: 800px; margin: auto; color: #333; background-color: #fafafa; }
-        h1 { color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; margin-top: 40px; }
-        h2 { color: #16a085; margin-top: 30px; }
-        .highlight { font-weight: bold; color: #2c3e50; }
-        ul { padding-left: 20px; }
-        li { margin-bottom: 8px; }
+<meta charset="utf-8" />
+<title>Animated Scene</title>
 
-        /* --- CLEAN, FIXED ANIMATION CONTAINER --- */
-        .hero-banner {
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            border-radius: 12px;
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            margin-bottom: 30px;
-            overflow: hidden;
-            position: relative;
-            height: 220px;
-            box-sizing: border-box;
-        }
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  background: black;
+  font-family: Arial;
+}
 
-        .hello-world {
-            font-size: 3.5rem;
-            font-weight: bold;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin: 0 0 25px 0;
-            display: inline-block;
-            animation: glow 2s ease-in-out infinite alternate;
-        }
+/* Glow Text */
+#hello {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  text-align: center;
+  font-size: 60px;
+  color: #00ffcc;
+  text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc, 0 0 40px #00ffcc;
+  animation: glow 2s infinite alternate;
+}
 
-        @keyframes glow {
-            from { text-shadow: 0 0 10px #fff, 0 0 20px #1abc9c, 0 0 30px #117a65; }
-            to { text-shadow: 0 0 20px #fff, 0 0 30px #2ecc71, 0 0 40px #27ae60; }
-        }
+@keyframes glow {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+}
 
-        /* --- PROPERLY PROPORTIONED PAKISTAN FLAG BANNER --- */
-        .flag-banner {
-            width: 100%;
-            height: 100px;
-            border-radius: 6px;
-            display: flex;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            position: relative;
-        }
+/* Pakistan Flag Popup */
+#flag {
+  position: absolute;
+  right: 20px;
+  top: 100px;
+  width: 120px;
+  height: 80px;
+  border: 2px solid white;
+  animation: pop 2s ease-in-out infinite alternate;
+}
 
-        .flag-white {
-            width: 25%;
-            background-color: #ffffff;
-        }
+@keyframes pop {
+  from { transform: scale(0.8); }
+  to { transform: scale(1.1); }
+}
 
-        .flag-green {
-            width: 75%;
-            background-color: #004124;
-            position: relative;
-        }
-
-        /* Perfectly centered svg crescent and star so they never shift */
-        .flag-emblem {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            width: 60px;
-            height: 60px;
-        }
-
-        /* --- FLYING JET --- */
-        .airplane {
-            position: absolute;
-            left: -50px;
-            top: 45px;
-            font-size: 28px;
-            z-index: 10;
-            animation: flyAcross 5s linear infinite;
-            line-height: 1;
-        }
-
-        @keyframes flyAcross {
-            0% { left: -50px; transform: scaleX(1); }
-            45% { left: 110%; transform: scaleX(1); }
-            /* Turn around and fly back right to left */
-            50% { left: 110%; transform: scaleX(-1); }
-            95% { left: -50px; transform: scaleX(-1); }
-            100% { left: -50px; transform: scaleX(1); }
-        }
-
-        /* --- DYNAMIC JET TRAIL PARTICLES --- */
-        .particle {
-            position: absolute;
-            pointer-events: none;
-            border-radius: 50%;
-            z-index: 5;
-            animation: fadeOutParticle 0.8s ease-out forwards;
-        }
-
-        @keyframes fadeOutParticle {
-            0% { opacity: 0.8; transform: scale(1); }
-            100% { opacity: 0; transform: scale(2.5) translateY(-10px); }
-        }
-    </style>
+/* Robot */
+#robot {
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  width: 60px;
+  height: 60px;
+  background: gray;
+  border-radius: 10px;
+}
+</style>
 </head>
+
 <body>
 
-    <!-- HERO SECTION -->
-    <div class="hero-banner" id="heroBanner">
-        <div class="hello-world">Hello World</div>
-        
-        <!-- Continuous Airplane Track -->
-        <div class="airplane" id="jet">✈️</div>
+<div id="hello">HELLO WORLD</div>
 
-        <!-- Corrected Pakistan Flag Layout -->
-        <div class="flag-banner">
-            <div class="flag-white"></div>
-            <div class="flag-green">
-                <!-- Clean vector moon and star that won't distort -->
-                <svg class="flag-emblem" viewBox="0 0 100 100">
-                    <!-- Crescent Moon -->
-                    <path d="M60,15 A35,35 0 1,0 95,50 A28,28 0 1,1 60,15 Z" fill="#ffffff"/>
-                    <!-- Star -->
-                    <polygon points="62,35 66,45 76,45 68,51 71,61 62,55 53,61 56,51 48,45 58,45" fill="#ffffff" transform="rotate(45, 62, 48)"/>
-                </svg>
-            </div>
-        </div>
-    </div>
+<!-- Pakistan Flag -->
+<svg id="flag" viewBox="0 0 60 40">
+  <rect width="60" height="40" fill="green"/>
+  <rect width="15" height="40" fill="white"/>
+  <circle cx="38" cy="20" r="10" fill="white"/>
+</svg>
 
-    <!-- MAIN PROFILE CONTENT -->
-    <h1>Masooma Zahra</h1>
-    <p>
-      I am an <span class="highlight">Electrical Engineering</span> student at UMass Boston specializing in the intersection of autonomous systems, hardware-software integration, and technology policy. Guided by a commitment to open science and accessibility, my work ranges from designing intelligent edge-computing logic to engineering human-centric prototypes like the <strong>Visual Caption Board (VCB)</strong> project.
-    </p>
-    <p>
-      Beyond the engineering lab, I am an active writer and published poet—with work featured by the Madison Public Library—who leverages creative literature to empower youth and advocate for social equity. Whether collaborating on mission architectures within the <strong>NASA L'Space Academy</strong>, mentoring peers in foundational mathematics as a PAL Leader, or analyzing policy at academic symposia, I strive to bridge technical rigor with impactful human advocacy.
-    </p>
+<div id="robot"></div>
 
-    <h2>Key Engagements & Focus Areas</h2>
-    <ul>
-        <li><strong>Aerospace & Autonomy:</strong> Developing robotic and AI proposal tracks for extreme space environments through NASA L'Space.</li>
-        <li><strong>Accessibility Engineering:</strong> Prototyping hardware and custom display workflows to enhance communication safety.</li>
-        <li><strong>Creative Writing:</strong> Authoring motivational literature and poetry centered around resilience and community empowerment.</li>
-    </ul>
+<canvas id="canvas"></canvas>
 
-    <!-- TRAIL PARTICLE SCRIPT -->
-    <script>
-        const container = document.getElementById('heroBanner');
-        const jet = document.getElementById('jet');
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
-        function createTrail() {
-            // Get the exact live position of the jet inside the container
-            const jetRect = jet.getBoundingClientRect();
-            const containerRect = container.getBoundingClientRect();
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-            const x = jetRect.left - containerRect.left + (jetRect.width / 2);
-            const y = jetRect.top - containerRect.top + (jetRect.height / 2) + 5;
+// Airplane state
+let planeX = 0;
+let planeY = 150;
+let angle = 0;
 
-            // 1. Create a Smoke Cloud
-            const smoke = document.createElement('div');
-            smoke.className = 'particle';
-            smoke.style.left = x + 'px';
-            smoke.style.top = y + 'px';
-            smoke.style.width = '8px';
-            smoke.style.height = '8px';
-            smoke.style.backgroundColor = 'rgba(240, 240, 240, 0.4)';
-            container.appendChild(smoke);
+// Robot movement
+let robotX = 0;
+let direction = 2;
 
-            // 2. Create a Sparkle
-            const sparkle = document.createElement('div');
-            sparkle.className = 'particle';
-            sparkle.style.left = (x + (Math.random() * 14 - 7)) + 'px';
-            sparkle.style.top = (y + (Math.random() * 14 - 7)) + 'px';
-            sparkle.style.width = '4px';
-            sparkle.style.height = '4px';
-            sparkle.style.backgroundColor = Math.random() > 0.5 ? '#f1c40f' : '#ffffff'; // Gold or white sparkles
-            sparkle.style.boxShadow = '0 0 8px #f1c40f';
-            container.appendChild(sparkle);
+// Smoke particles
+let particles = [];
 
-            // Remove elements from code after animation finishes to keep memory clean
-            setTimeout(() => {
-                smoke.remove();
-                sparkle.remove();
-            }, 800);
-        }
+function drawPlane(x, y, angle) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(angle);
 
-        // Generate trails continuously every 40 milliseconds
-        setInterval(createTrail, 40);
-    </script>
+  ctx.fillStyle = "white";
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(30, 10);
+  ctx.lineTo(0, -10);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function createSmoke(x, y) {
+  particles.push({
+    x: x,
+    y: y,
+    alpha: 1,
+    size: Math.random() * 5 + 2
+  });
+}
+
+function drawParticles() {
+  for (let i = 0; i < particles.length; i++) {
+    let p = particles[i];
+    ctx.fillStyle = `rgba(200,200,200,${p.alpha})`;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fill();
+
+    p.y += 1;
+    p.alpha -= 0.02;
+  }
+
+  particles = particles.filter(p => p.alpha > 0);
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Plane movement + rotation
+  planeX += 3;
+  angle += 0.05;
+  if (planeX > canvas.width) planeX = 0;
+
+  createSmoke(planeX, planeY);
+  drawPlane(planeX, planeY, angle);
+  drawParticles();
+
+  // Robot movement
+  robotX += direction;
+  if (robotX > canvas.width - 60 || robotX < 0) direction *= -1;
+
+  document.getElementById("robot").style.left = robotX + "px";
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+</script>
 
 </body>
 </html>
