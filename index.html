@@ -1,52 +1,107 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<style>
-    body { margin: 0; overflow: hidden; background: #f0f0f0; font-family: sans-serif; }
-    
-    /* Pakistan Flag */
-    #flag {
-        width: 150px; height: 100px; background: #006600;
-        position: absolute; top: 20px; right: 20px;
-        display: flex; align-items: center; justify-content: center;
-        border-left: 20px solid white;
-    }
-    #flag::before { content: "🌙 ★"; color: white; font-size: 30px; }
+<div align="center">
 
-    /* Robot */
-    #robot {
-        width: 50px; height: 80px; background: #888;
-        position: absolute; bottom: 50px; left: -100px;
-        border-radius: 10px; animation: robotMove 10s linear forwards;
-    }
+# 🌟 Masooma's World! 🌟
 
-    /* Text */
-    #msg { position: absolute; top: 40%; left: 40%; font-size: 40px; opacity: 0; }
+<!-- Robot Holding the Pakistan Flag (Vector Graphic) -->
+<svg width="420" height="300" viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Flag Wave Filter -->
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="3" dy="4" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+  </defs>
 
-    /* Airplane */
-    #plane { position: absolute; top: 100px; left: -150px; font-size: 50px; }
+  <!-- Shadow under Robot -->
+  <ellipse cx="140" cy="275" rx="55" ry="12" fill="#d0d7de" />
 
-    /* Animations */
-    @keyframes robotMove {
-        0% { left: -100px; }
-        20% { left: 40%; transform: rotateY(0deg); }
-        30% { transform: rotateY(180deg); } /* Turn to screen */
-        40% { transform: rotateY(180deg) scale(1.2); } /* Come ahead */
-        50% { opacity: 1; } /* Hand wave logic would go here */
-        60% { content: "Hello World"; }
-        70% { opacity: 0; }
-        80% { top: 20px; left: 80%; } /* Grabs flag */
-        90% { top: 20px; left: 80%; background: red; } /* Drops it */
-        100% { left: 100%; } /* Runs away */
-    }
-</style>
-</head>
-<body>
+  <!-- === PAKISTAN FLAG & POLE === -->
+  <!-- Flag Pole -->
+  <rect x="235" y="45" width="8" height="235" rx="3" fill="#8c959f" />
+  <circle cx="239" cy="45" r="7" fill="#f6c343" /> <!-- Gold finial top -->
 
-    <div id="flag"></div>
-    <div id="robot">🤖</div>
-    <div id="msg">Hello World</div>
-    <div id="plane">✈️💨</div>
+  <!-- Flag Base (Green & White) -->
+  <g filter="url(#shadow)">
+    <!-- White Stripe (Left 1/4) -->
+    <rect x="243" y="55" width="35" height="90" fill="#ffffff" stroke="#e1e4e8" stroke-width="1"/>
+    <!-- Dark Green Field (Right 3/4) -->
+    <rect x="278" y="55" width="105" height="90" fill="#01411C" />
 
-</body>
-</html>
+    <!-- Crescent Moon (White) -->
+    <!-- Base White Circle -->
+    <circle cx="330" cy="100" r="26" fill="#ffffff" />
+    <!-- Subtractive Green Circle (Crescent cutter angled at ~45 deg) -->
+    <circle cx="338" cy="93" r="23" fill="#01411C" />
+
+    <!-- 5-Pointed Star (White) -->
+    <polygon points="342,82 345,91 354,91 347,97 350,105 342,100 335,105 337,97 331,91 340,91" fill="#ffffff" transform="rotate(15, 342, 93)"/>
+  </g>
+
+  <!-- === THE ROBOT === -->
+  <!-- Legs -->
+  <rect x="110" y="215" width="18" height="45" rx="5" fill="#4a5568" />
+  <rect x="150" y="215" width="18" height="45" rx="5" fill="#4a5568" />
+  <!-- Boots -->
+  <rect x="104" y="252" width="28" height="16" rx="6" fill="#2d3748" />
+  <rect x="146" y="252" width="28" height="16" rx="6" fill="#2d3748" />
+
+  <!-- Left Arm (Resting on hip) -->
+  <path d="M 85 140 Q 60 170 85 200" stroke="#4a5568" stroke-width="14" fill="none" stroke-linecap="round" />
+  <circle cx="86" cy="200" r="9" fill="#f6c343" />
+
+  <!-- Body (Torso) -->
+  <rect x="85" y="125" width="110" height="95" rx="16" fill="#63b3ed" stroke="#2b6cb0" stroke-width="4"/>
+  <!-- Chest Screen -->
+  <rect x="103" y="142" width="74" height="48" rx="8" fill="#1a202c" />
+  <!-- Pulse Line inside Screen -->
+  <path d="M 110 166 L 125 166 L 132 152 L 142 180 L 150 166 L 170 166" stroke="#48bb78" stroke-width="3" fill="none" stroke-linecap="round"/>
+
+  <!-- Head -->
+  <rect x="95" y="55" width="90" height="65" rx="14" fill="#90cdf4" stroke="#2b6cb0" stroke-width="4"/>
+  <!-- Visor / Eyes -->
+  <rect x="110" y="72" width="60" height="26" rx="8" fill="#1a202c" />
+  <circle cx="125" cy="85" r="6" fill="#00ffff" />
+  <circle cx="155" cy="85" r="6" fill="#00ffff" />
+
+  <!-- Antenna -->
+  <line x1="140" y1="55" x2="140" y2="28" stroke="#4a5568" stroke-width="5" />
+  <circle cx="140" cy="24" r="8" fill="#e53e3e" /> <!-- Blinking red light -->
+
+  <!-- Right Arm (Extended holding the flag pole) -->
+  <path d="M 190 145 Q 220 150 240 160" stroke="#4a5568" stroke-width="14" fill="none" stroke-linecap="round"/>
+  <!-- Clamping Hand holding the pole -->
+  <circle cx="239" cy="162" r="11" fill="#f6c343" />
+</svg>
+
+### 🇵🇰 Proudly Powered by Youth, Imagination & Code! 🇵🇰
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Age-Just_A_Teenager_%F0%9F%A7%92-ff69b4?style=for-the-badge" alt="Age">
+  <img src="https://img.shields.io/badge/Country-Pakistan_%F0%9F%87%B5%F0%9F%87%B0-01411C?style=for-the-badge" alt="Pakistan">
+  <img src="https://img.shields.io/badge/Status-Building_Cool_Stuff-blueviolet?style=for-the-badge" alt="Status">
+</p>
+
+---
+
+</div>
+
+### 👩‍💻 About Me
+- 👧 **Who am I?** Just a passionate **teenager** exploring the universe of coding, robots, and games!
+- 📍 **From:** Pakistan 🇵🇰
+- 🚀 **Currently Building:** Fun interactive games, web apps, and robotic projects.
+- 💡 **Belief:** *"Age is just a number; you are never too young to innovate and build the future!"*
+
+---
+
+### 🛠️ My Toolbox
+<p align="left">
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white" />
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white" />
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black" />
+  <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white" />
+</p>
+
+---
+
+<div align="center">
+  <i>Thanks for visiting Masooma's World! Feel free to star ⭐ my repositories!</i>
+</div>
